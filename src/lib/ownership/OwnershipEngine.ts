@@ -39,7 +39,7 @@ export class OwnershipEngine {
   }
 
 
-  public static FromCodeownersFile(filePath: string, allowRelativePaths: boolean) {
+  public static FromCodeownersFile(filePath: string) {
     try {
       const lines = fs.readFileSync(filePath).toString().split('\n');
 
@@ -50,7 +50,7 @@ export class OwnershipEngine {
           continue;
         }
 
-        owned.push(createMatcherCodeownersRule(line, allowRelativePaths));
+        owned.push(createMatcherCodeownersRule(line));
       }
 
       return new OwnershipEngine(owned);
@@ -61,7 +61,7 @@ export class OwnershipEngine {
   }
 }
 
-const createMatcherCodeownersRule = (rule: string, allowRelativePaths: boolean): FileOwnershipMatcher => {
+const createMatcherCodeownersRule = (rule: string): FileOwnershipMatcher => {
   // Split apart on spaces
   const parts = rule.split(/\s+/);
 
@@ -81,7 +81,7 @@ const createMatcherCodeownersRule = (rule: string, allowRelativePaths: boolean):
   }
 
   // Create an `ignore` matcher to ape github behaviour
-  const match: any = ignore({ allowRelativePaths }).add(path);
+  const match: any = ignore({ allowRelativePaths: true }).add(path);
 
   // Workaround for rules ending with /*
   // GitHub will not look for nested files, so we adjust the node-ignore regex
