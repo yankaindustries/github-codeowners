@@ -19,7 +19,7 @@ export class OwnershipEngine {
     const matchers = [...this.matchers].reverse();
 
     for (const matcher of matchers) {
-      if (matcher.match(filePath)) {
+      if (filePath.includes(matcher.path)) {
         matcher.matched++;
         return matcher.owners;
       }
