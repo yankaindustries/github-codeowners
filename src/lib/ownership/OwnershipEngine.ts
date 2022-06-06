@@ -19,7 +19,7 @@ export class OwnershipEngine {
     const matchers = [...this.matchers].reverse();
 
     for (const matcher of matchers) {
-      if (matcher.match(filePath)) {
+      if (filePath.includes(matcher.path)) {
         matcher.matched++;
         return matcher.owners;
       }
@@ -81,7 +81,7 @@ const createMatcherCodeownersRule = (rule: string): FileOwnershipMatcher => {
   }
 
   // Create an `ignore` matcher to ape github behaviour
-  const match: any = ignore().add(path);
+  const match: any = ignore({ allowRelativePaths: true }).add(path);
 
   // Workaround for rules ending with /*
   // GitHub will not look for nested files, so we adjust the node-ignore regex
